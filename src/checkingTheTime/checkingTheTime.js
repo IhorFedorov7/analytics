@@ -5,14 +5,11 @@
     let time = undefined;
   
     document.querySelector('html').addEventListener('mouseout', (e) => {
-
       let events = e || window.e;
-
       if ( events.clientY <= 0 ) {
 
         stop();
       } else if ( events.clientY >= 0 ) {
-
         if ( timer === undefined ) {
 
           start();
@@ -26,7 +23,6 @@
     };
   
     window.onfocus = () => {   
-
       if ( timer === undefined ) {
 
         start();
@@ -34,7 +30,6 @@
     };
   
     function start() {
-
       timer = setInterval(() => {
 
         milliseconds += 10;
@@ -52,7 +47,7 @@
     function stop() {
 
       clearInterval(timer);
-      
+
       const info = {
         currentLocation: window.location.hostname,
         time: time
