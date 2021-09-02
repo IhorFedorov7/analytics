@@ -35,12 +35,7 @@
         milliseconds += 10;
         let dateTimet = new Date(milliseconds);
   
-        return time = `
-            ${(`${dateTimet.getUTCHours()}`).split(-2)} : 
-            ${(`${dateTimet.getUTCMinutes()}`).split(-2)} : 
-            ${(`${dateTimet.getUTCSeconds()}`).split(-2)} : 
-            ${(`${dateTimet.getUTCMilliseconds()}`).split(-3,-1)}
-        `;
+        return time = `${(`${dateTimet.getUTCHours()}`).split(-2)} : ${(`${dateTimet.getUTCMinutes()}`).split(-2)} : ${(`${dateTimet.getUTCSeconds()}`).split(-2)} : ${(`${dateTimet.getUTCMilliseconds()}`).split(-3,-1)}`;
       },10);
     };
   
@@ -50,6 +45,7 @@
 
       const info = {
         currentLocation: window.location.hostname,
+        currentURL: window.location.href,
         time: time
       };
 
