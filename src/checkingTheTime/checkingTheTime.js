@@ -1,59 +1,60 @@
 (function () { 
-  
-    let milliseconds = 0;
-    let timer = undefined;
-    let time = undefined;
-  
+    let starts,
+        end,
+        resTim;
+    
     document.querySelector('html').addEventListener('mouseout', (e) => {
-      let events = e || window.e;
-      if ( events.clientY <= 0 ) {
+        let events = e || window.e;
+        if ( events.clientY <= 0 ) {
 
-        stop();
-      } else if ( events.clientY >= 0 ) {
-        if ( timer === undefined ) {
+            stop();
+        } else if ( events.clientY >= 0 ) {
+            if ( starts === undefined ) {
 
-          start();
+            start();
+            }
         }
-      }
     });
 
     window.onblur = () => {   
 
-      stop();
+        stop();
     };
   
     window.onfocus = () => {   
-      if ( timer === undefined ) {
+        if ( starts === undefined ) {
 
-        start();
-      }
+            start();
+        }
     };
   
     function start() {
-      timer = setInterval(() => {
 
-        milliseconds += 10;
-        let dateTimet = new Date(milliseconds);
-  
-        return time = `${(`${dateTimet.getUTCHours()}`).split(-2)} : ${(`${dateTimet.getUTCMinutes()}`).split(-2)} : ${(`${dateTimet.getUTCSeconds()}`).split(-2)} : ${(`${dateTimet.getUTCMilliseconds()}`).split(-3,-1)}`;
-      },10);
+        starts = window.performance.now();
     };
   
     function stop() {
 
-      clearInterval(timer);
+        end = window.performance.now();
+        
+        if (
+            starts !== undefined &&
+            end !== undefined
+        ) {
+            
+            resTim = end - starts;
+        }  
 
-      const info = {
-        currentLocation: window.location.hostname,
-        currentURL: window.location.href,
-        time: time
-      };
+        const logs = {
+            site: window.document.location.hostname,
+            url: window.document.location.href,
+            time: `${(`${Math.floor((resTim / (1000 * 60 * 60) % 24))}`).split(-2)}:${(`${Math.floor((resTim / 1000 / 60) % 60)}`).split(-2)}:${(`${Math.floor((resTim / 1000) % 60)}`).split(-2)}:${(`${Math.floor((resTim % 1000))}`).split(-3,-1)}`
+        };
 
-      console.log(info); //реализацияя функции куда передавать данные
+        console.log(logs); //реализацияя функции куда передавать данные
 
-      milliseconds = 0;
-      timer = undefined;
-      time = undefined;
+        starts = undefined;
+        end = undefined;
     };
-  })();
+})();
   

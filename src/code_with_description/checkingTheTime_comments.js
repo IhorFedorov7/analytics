@@ -1,10 +1,8 @@
 //Самовызывающая функция
 (function () { 
-  
-  let milliseconds = 0;
-  let timer = undefined;
-  let time = undefined;
-
+  let starts,
+      end,
+      resTim;
   /*
     Проверяет событие мыши!
     Если мыша выходит за границы документа:
@@ -23,13 +21,12 @@
     //Триггер на стоп - это вход за область контента сайта
     } else if (events.clientY >= 0) {
       console.log('2 старт мыша');
-      if (timer === undefined) {
+      if (starts === undefined) {
         console.log('2.1 старт мыша в пределах окна');
         start();
       }
     }
   });
-
   /*
     Изменение форкуса! Стоп таймер
     Пример что есть триггер:
@@ -40,7 +37,6 @@
     console.log('3 стоп фокус не в пределах окна');
     stop();
   };
-
   /*
     Запуск счетчика! Старт таймер
     Триггре:
@@ -48,37 +44,42 @@
   */
   window.onfocus = () => {   
     console.log('4 фокус');
-    if (timer === undefined) {
+    if (starts === undefined) {
       console.log('4.1 старт фокус в пределах окна');
       start();
     }
   };
-
-  //Старт таймера
+  //Старт - запись временой метки
   function start() {
-    timer = setInterval(() => {
-      milliseconds += 10;
-      let dateTimet = new Date(milliseconds);
 
-      return time = `${(`${dateTimet.getUTCHours()}`).split(-2)} : ${(`${dateTimet.getUTCMinutes()}`).split(-2)} : ${(`${dateTimet.getUTCSeconds()}`).split(-2)} : ${(`${dateTimet.getUTCMilliseconds()}`).split(-3,-1)}`;
-    },10);
+    starts = window.performance.now();
   };
-
   /*
-    Стоп таймер!
-    Останавливаем таймерю.
+    Стоп - запись временой метки
+    расчет времени.
     После формирует объект с доменным именем сайта и сколькона нем было пароведено времени.
     После формированый объект Выводмс в консоль ( отправка на сервер)
   */
   function stop() {
-    clearInterval(timer);
-    const info = {
-      currentLocation: window.location.hostname,
-      time: time
-    };
-    console.log(info);
-    milliseconds = 0;
-    timer = undefined;
-    time = undefined;
+
+    end = window.performance.now();
+    //проверка на наличие папаметров и вычисление  
+    if (
+      starts !== undefined &&
+      end !== undefined
+    ) {
+      
+      resTim = end - starts;
+    }  
+    //запись данных
+    const logs = {
+      site: window.document.location.hostname,
+      url: window.document.location.href,
+      time: `${(`${Math.floor((resTim / (1000 * 60 * 60) % 24))}`).split(-2)}:${(`${Math.floor((resTim / 1000 / 60) % 60)}`).split(-2)}:${(`${Math.floor((resTim / 1000) % 60)}`).split(-2)}:${(`${Math.floor((resTim % 1000))}`).split(-3,-1)}`
+  };
+    console.log(logs); //реализацияя функции куда передавать данные
+    //очистка параметров
+    starts = undefined;
+    end = undefined;
   };
 })();
